@@ -1,0 +1,43 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'es.yori.sleeptrain'
+    compileSdk 36
+    buildToolsVersion '36.0.0'
+    defaultConfig {
+        applicationId 'es.yori.sleeptrain'
+        minSdk 26
+        targetSdk 36
+        versionCode 5
+        versionName '0.5.0'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    buildTypes {
+        release { minifyEnabled false }
+    }
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            systemProperty 'robolectric.dependency.repo.url', 'https://repo.maven.apache.org/maven2'
+        }
+    }
+}
+
+dependencies {
+    implementation 'org.mobilitydata:gtfs-realtime-bindings:0.2.0'
+    implementation 'com.google.protobuf:protobuf-java:4.34.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20240303'
+    testImplementation 'org.robolectric:robolectric:4.16.1'
+}
+
+tasks.register('probeFeeds', JavaExec) {
+    dependsOn 'compileDebugUnitTestJavaWithJavac'
+    classpath = files(provider { tasks.named('testDebugUnitTest').get().classpath })
+    mainClass = 'es.yori.sleeptrain.data.realtime.LiveFeedProbe'
+    workingDir = projectDir
+}
+

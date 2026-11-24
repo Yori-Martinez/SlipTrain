@@ -1,0 +1,375 @@
+<div id="sleeptrain-revision" lang="es">
+  <nav class="st-demos" aria-label="Escenarios de la maqueta">
+    <button type="button" data-demo="trip" aria-pressed="true">Viaje puntual</button>
+    <button type="button" data-demo="gps" aria-pressed="false">Sin señal GPS</button>
+    <button type="button" data-demo="routine" aria-pressed="false">Crear una alarma</button>
+    <button type="button" data-demo="compare" aria-pressed="false">Comparar seguimiento</button>
+  </nav>
+  <div class="st-stage viz-dotted-background" data-stage>
+    <div class="st-phone" data-phone></div>
+  </div>
+  <div class="st-compare viz-dotted-background" data-comparison hidden>
+    <div class="viz-carousel" aria-label="Orientación del progreso" data-previous-label="Anterior" data-next-label="Siguiente">
+      <section data-variant="Horizontal" aria-label="Seguimiento horizontal"><div class="st-phone" data-horizontal></div></section>
+      <section data-variant="Vertical" aria-label="Seguimiento vertical" hidden><div class="st-phone" data-vertical></div></section>
+    </div>
+    <div class="st-compare-controls">
+      <button type="button" data-act="compare-advance">Avanzar una estación</button>
+      <button type="button" data-act="compare-jump">Ver cerca del destino</button>
+    </div>
+  </div>
+  <input data-file type="file" accept="audio/*" hidden aria-label="Seleccionar archivo de audio del sistema">
+</div>
+
+<style>
+  #sleeptrain-revision{--st-bg:#101715;--st-card:#1c2622;--st-tier:#293730;--st-edge:#37483f;--st-text:#eff9f2;--st-dim:#a7bdb0;--st-mint:#a3edc5;--st-ink:#13241b;--st-green:#243e31;--st-hero:#173326;--st-gold:#ffd58f;--st-warn:#352c20;--st-lilac:#cbb9ff;display:grid;gap:14px;font-family:Roboto,Arial,sans-serif}
+  #sleeptrain-revision *,#sleeptrain-revision *::before,#sleeptrain-revision *::after{box-sizing:border-box}
+  #sleeptrain-revision [hidden]{display:none!important}
+  #sleeptrain-revision button,#sleeptrain-revision input{font:inherit}
+  #sleeptrain-revision button{touch-action:manipulation}
+  #sleeptrain-revision .st-demos,#sleeptrain-revision .st-compare-controls{display:flex;flex-wrap:wrap;justify-content:center;gap:7px}
+  #sleeptrain-revision .st-demos button,#sleeptrain-revision .st-compare-controls button{min-height:42px;padding:8px 13px;border:1px solid var(--st-edge);border-radius:999px;background:var(--st-card);color:var(--st-text);font-size:13px}
+  #sleeptrain-revision .st-demos button[aria-pressed=true]{background:var(--st-mint);border-color:var(--st-mint);color:var(--st-ink);font-weight:700}
+  #sleeptrain-revision .st-stage,#sleeptrain-revision .st-compare{display:grid;justify-items:center;padding:14px 0;gap:12px}
+  #sleeptrain-revision .st-compare .viz-carousel,#sleeptrain-revision .st-compare section{width:100%}
+  #sleeptrain-revision .st-compare section{display:grid;justify-items:center}
+  #sleeptrain-revision .st-phone{color-scheme:dark;width:min(100%,390px);min-height:670px;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--st-edge);border-radius:30px;background:var(--st-bg);color:var(--st-text);box-shadow:0 14px 45px #12201924}
+  #sleeptrain-revision .st-system{display:flex;justify-content:space-between;align-items:center;padding:13px 22px 7px;font-size:12px;font-weight:600}
+  #sleeptrain-revision .st-system-signals{display:flex;align-items:center;gap:5px}
+  #sleeptrain-revision .st-battery{display:inline-block;width:15px;height:8px;border:1px solid currentColor;border-radius:2px;background:linear-gradient(90deg,currentColor 80%,transparent 80%)}
+  #sleeptrain-revision .st-head{display:flex;align-items:center;gap:11px;min-height:64px;padding:5px 20px 8px}
+  #sleeptrain-revision .st-brand{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:50%;background:var(--st-mint);color:var(--st-ink)}
+  #sleeptrain-revision .st-head h2{margin:0;min-width:0;flex:1;font-size:24px;line-height:1.2;font-weight:700}
+  #sleeptrain-revision .st-iconBtn{border:0;background:var(--st-tier);color:var(--st-text);border-radius:14px;width:44px;height:44px;display:grid;place-items:center;flex:none}
+  #sleeptrain-revision .st-body{display:grid;gap:13px;padding:4px 20px 12px}
+  #sleeptrain-revision .st-gesture{height:4px;width:107px;border-radius:10px;background:#d8e2db;margin:auto auto 11px;flex-shrink:0}
+  #sleeptrain-revision .st-body + .st-gesture{margin-top:auto}
+  #sleeptrain-revision .st-card{display:grid;gap:11px;border:1px solid var(--st-edge);border-radius:22px;padding:15px;background:var(--st-card);min-width:0}
+  #sleeptrain-revision .st-card.st-hero{background:var(--st-hero);border-color:#214234}
+  #sleeptrain-revision .st-card.st-warning{background:var(--st-warn);border-color:var(--st-gold)}
+  #sleeptrain-revision .st-topline{display:flex;align-items:center;justify-content:space-between;gap:9px}
+  #sleeptrain-revision .st-h3{margin:0;font-size:20px;line-height:1.16;font-weight:700}
+  #sleeptrain-revision .st-hero .st-h3{font-size:26px}
+  #sleeptrain-revision .st-kicker{color:var(--st-mint);font-size:11px;font-weight:700;letter-spacing:.105em}
+  #sleeptrain-revision .st-warning .st-kicker{color:var(--st-gold)}
+  #sleeptrain-revision .st-dim{color:var(--st-dim);font-size:13px;line-height:1.42;margin:0}
+  #sleeptrain-revision .st-rule{border:0;border-top:1px solid var(--st-edge);margin:0}
+  #sleeptrain-revision .st-action{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;min-height:46px;color:var(--st-ink);background:var(--st-mint);padding:9px 11px;border:0;border-radius:14px;font-weight:700;font-size:14px;text-align:center}
+  #sleeptrain-revision .st-action:disabled{background:var(--st-tier);color:var(--st-dim);opacity:.6}
+  #sleeptrain-revision .st-action.st-secondary{background:var(--st-tier);color:var(--st-text)}
+  #sleeptrain-revision .st-action.st-amber{background:var(--st-gold)}
+  #sleeptrain-revision .st-action.st-quiet{background:transparent;color:var(--st-dim)}
+  #sleeptrain-revision .st-mini{width:auto;min-width:72px;background:var(--st-green);color:var(--st-mint);padding-inline:10px}
+  #sleeptrain-revision .st-lineBtn{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;padding:9px 11px;border:0;border-radius:13px;background:var(--st-tier);color:var(--st-text);text-align:left;min-width:0}
+  #sleeptrain-revision .st-lineBtn > span{display:grid;flex:1;gap:3px;min-width:0}
+  #sleeptrain-revision .st-lineBtn b,#sleeptrain-revision .st-lineBtn strong{font-size:15px;font-weight:600;overflow-wrap:anywhere}
+  #sleeptrain-revision .st-lineBtn i,#sleeptrain-revision .st-lineBtn svg{color:var(--st-mint);flex:none}
+  #sleeptrain-revision .st-label{color:var(--st-dim);font-size:12px;font-weight:400}
+  #sleeptrain-revision .st-form{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  #sleeptrain-revision .st-form > *{min-width:0}
+  #sleeptrain-revision .st-field{display:grid;gap:4px;padding:9px 11px;border-radius:12px;background:var(--st-tier);color:var(--st-dim);font-size:12px}
+  #sleeptrain-revision .st-field input{width:100%;min-width:0;background:transparent;border:0;color:var(--st-text);padding:1px 0;font-size:16px}
+  #sleeptrain-revision .st-field select{width:100%;min-width:0;min-height:28px;border:0;background:transparent;color:var(--st-text);font:inherit;font-size:15px}
+  #sleeptrain-revision .st-field input[type=time]{font-size:19px;color:var(--st-mint);font-variant-numeric:tabular-nums}
+  #sleeptrain-revision .st-switch{accent-color:var(--st-mint);width:19px;height:19px}
+  #sleeptrain-revision .st-stations{display:grid;gap:7px}
+  #sleeptrain-revision .st-search{min-height:52px}
+  #sleeptrain-revision .st-search input{width:100%;background:transparent;min-width:0;padding:7px 0;border:0;color:var(--st-text);font-size:16px}
+  #sleeptrain-revision .st-result{background:var(--st-card);border:1px solid var(--st-edge)}
+  #sleeptrain-revision .st-logos,#sleeptrain-revision .st-route-chain{display:flex!important;align-items:center;gap:5px;flex:none!important}
+  #sleeptrain-revision .st-mark{display:block;width:23px;height:17px;object-fit:contain;flex:none}
+  #sleeptrain-revision .st-mark.st-renfe{width:18px;height:18px;background:white;border-radius:4px;padding:2px}
+  #sleeptrain-revision .st-route-chain{gap:4px;flex-wrap:wrap}
+  #sleeptrain-revision .st-pill{display:inline-flex;justify-content:center;background:var(--st-green);color:var(--st-mint);padding:4px 6px;border-radius:7px;font-size:12px;font-weight:700;line-height:1.1;white-space:nowrap}
+  #sleeptrain-revision .st-pill[data-line=L4],#sleeptrain-revision .st-pill[data-line=L3]{background:var(--st-warn);color:var(--st-gold)}
+  #sleeptrain-revision .st-pill[data-line=L10]{background:var(--st-tier);color:var(--st-lilac)}
+  #sleeptrain-revision .st-pill[data-line=L6]{background:var(--st-tier);color:#d8e2db}
+  #sleeptrain-revision .st-routes{display:grid;gap:7px}
+  #sleeptrain-revision .st-route{display:grid;width:100%;min-width:0;gap:6px;text-align:left;padding:10px 12px;border-radius:16px;background:var(--st-card);border:1px solid var(--st-edge);color:var(--st-text)}
+  #sleeptrain-revision .st-route[aria-pressed=true]{background:var(--st-green);border-color:var(--st-mint)}
+  #sleeptrain-revision .st-route strong{font-size:16px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  #sleeptrain-revision .st-route[data-compact] .st-mark{display:none}
+  #sleeptrain-revision .st-time{color:var(--st-mint);font-size:25px;font-variant-numeric:tabular-nums;font-weight:600}
+  #sleeptrain-revision .st-destination{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:4px 1px}
+  #sleeptrain-revision .st-destination svg{color:var(--st-mint)}
+  #sleeptrain-revision .st-rail{display:grid;grid-auto-columns:1fr;grid-auto-flow:column;position:relative;isolation:isolate;gap:0;list-style:none;margin:7px 0 0;padding:0;font-size:12px;line-height:1.3;min-width:0}
+  #sleeptrain-revision .st-stop{display:grid;grid-template-rows:24px auto;justify-items:center;position:relative;text-align:center;color:var(--st-dim);min-width:0}
+  #sleeptrain-revision .st-stop::before{content:"";height:2px;position:absolute;left:50%;right:-50%;top:11px;z-index:-1;background:var(--st-edge)}
+  #sleeptrain-revision .st-stop:last-child::before{display:none}
+  #sleeptrain-revision .st-stop:first-child::after{content:"";height:2px;position:absolute;left:0;right:50%;top:11px;z-index:-1;background:var(--st-mint)}
+  #sleeptrain-revision .st-dot{height:9px;width:9px;border-radius:50%;background:var(--st-dim);align-self:center}
+  #sleeptrain-revision .st-stop:first-child{color:var(--st-mint);font-weight:700}
+  #sleeptrain-revision .st-stop:first-child .st-dot{width:13px;height:13px;background:var(--st-mint);box-shadow:0 0 0 4px var(--st-green)}
+  #sleeptrain-revision .st-stop:last-child .st-dot{width:12px;height:12px;border:2px solid var(--st-mint);background:var(--st-card)}
+  #sleeptrain-revision .st-stop:last-child{color:var(--st-text);font-weight:700}
+  #sleeptrain-revision .st-stop-text{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;padding:0 3px 2px;word-break:normal;overflow-wrap:anywhere}
+  #sleeptrain-revision .st-stop[data-distant] .st-stop-text{display:block;white-space:nowrap;text-overflow:ellipsis;width:100%}
+  #sleeptrain-revision .st-rail.st-vertical{grid-auto-flow:row;grid-auto-columns:1fr;gap:0;padding:0;margin-block:3px}
+  #sleeptrain-revision .st-rail.st-vertical .st-stop{grid-template:36px / 25px minmax(0,1fr);justify-items:start;align-items:center;text-align:left;padding-left:6px}
+  #sleeptrain-revision .st-rail.st-vertical .st-stop::before{width:2px;height:auto;left:10px;right:auto;top:50%;bottom:-50%}
+  #sleeptrain-revision .st-rail.st-vertical .st-stop::after{width:2px;height:auto;left:10px;right:auto;top:0;bottom:50%}
+  #sleeptrain-revision .st-status{display:grid;gap:9px}
+  #sleeptrain-revision .st-pulse{display:inline-block;width:9px;height:9px;background:var(--st-mint);border-radius:50%;box-shadow:0 0 0 4px #a3edc52a;flex:none}
+  #sleeptrain-revision .st-editor-audio[aria-pressed=true]{background:var(--st-green)}
+  #sleeptrain-revision .st-compare-controls{padding:0 9px}
+  @media(max-width:370px){#sleeptrain-revision .st-head,#sleeptrain-revision .st-body{padding-inline:13px}#sleeptrain-revision .st-card{padding:12px}#sleeptrain-revision .st-route-chain .st-mark{width:17px;height:13px}#sleeptrain-revision .st-rail{font-size:11px}}
+</style>
+
+<script>
+(() => {
+  const root = document.getElementById('sleeptrain-revision');
+  if (!root) return;
+  const phone = root.querySelector('[data-phone]');
+  const stage = root.querySelector('[data-stage]');
+  const comparison = root.querySelector('[data-comparison]');
+  const fileInput = root.querySelector('[data-file]');
+  const metro = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAwCAYAAACG5f33AAAOOklEQVR42u2beZRU1Z3HP7/7Xr2qXugFaHpDBRRUoBsdBHSMjoeo5EiMa4wRRJIYjRKDHhHRIxJUZE7EQWOEgzoZR4MmasRMjHGUqHECI+5CKy4oLizdQO9b1Vvub/6oAhpsoBoZxaXO6VPdXfXeu/f7fp/fdu8T9tPX+sKqf3KEuQpGlRkVzate2R/HKfvbgD4uGNo7YcwUFbnMRUoAInSLWntnYKM7+re+Xf+NgN28FGRT7+ozjepMFxkRpoUDwEFwgRBdGQo3lTWsekTIfPiNgFBXNGyExVxvhDNiiPi70MZDCFFUWRKo3Ni/eeVrX2sB1/U6rE/MjV0mcJmH6Z3C7tGsBIhj8LGNEXqnDfzbK9ve3fK1EjCNa9VZRpnpItVdcc32tR1rVin2ppLGmoe/CKw/dwHrCoceYcW53hHOcBH8zzjnLlg/Jio39PucsZbPGdepAlOyxbUnk0hjrY0RdoEGydsr2tZs/koIqCCbe1edjerMGKaqR7gGYfo95vYMa9UaFXtTSeObDwvYL62A6wqrj3REr3eE03uEaxShYUTsyGERIgSv1jjiOuA4PcPa6p8EuaFf86pXv1QCrs8f0teNeVMFM8VDirPGVRVN+ZjSvjbnZxM07+KJggjtdy3WzoW/E1u72UjcA5EeYG2bInSBBu5tFW2vb96vBVQwm4uHn40yMyZmeI9w9QM05mritJOjvKsuNrFhQ8wONK9+z3bcssh2LnnKkcAXPC9rrGOAr/qmlWhOaeNbf9iXWMu+rF0Ner1j5LS9w3VolD9jisa/+21nN+PS1BPPRG1zF0jwao0jjgNudljHECIUa/XPDjK7ZB/V1p9ZwA35R5Q4MTsVdEocU7RXuF4yUXMvmiBOUYHJ5lDb3Grb735AOxfcn8ba88Bkj3UK26ywQH25rbx95aYvRMA0rtXfR3VmTGRYz3D10VhME6ePS+M6dLDZmzEEq9fYjnmLbOej/723WL9lhTmljat+v7dY75WAGwqrRkoa1+85CEEX4QTIsQGyKzGN0dhR1TY+Y4oy9jhnH1CgPL8sSs35jQQvv2EIrXR3RkXoNLEdRhVDsCiR1ccdl9kl9TUv/78KmMH1ckEv9brB1aB0SIwFvY+m08S6Yc9CcZFNnDEOt7SvUT8A/YzptAjixQg31dvkkiehoclgPm3QCRsypfEFcq2P7TLtLtG6GVgY+TK/J1hLtrjWFVf9wCjXeSJDg13g6qDUmxyqD5mK7+TRbWmqFlI+RPs4v3UMeB7diQdCLOpg5fu30zfqIOpm2l2wXm3ROc831fz+HIj2dNk9pvgbCoYfVefI9Q6cakRI7sHPCZBrA3zx09aVzFQTRiCeiZieAZ/tIsad3QcB1bSHMrKHWx7uwpMJuTbY7aERSgTERA4X+N3xxVU/3Gyc2SX1r7+0VwJuzKvu53h6ucKlcUxhCptdkNiKpCo5CYerfzqMnLjL6g9buPcva9NGGVnGn1DJ8Uf2ww8ti5asYd3GDnC6dV7kJFx65cZobg9IpaK995pZuIsARYAEZnwqio7bVFS10AY6v6y9pq5bl77zPx4Cp7a46jw3ps96yDUGKUxmm5r4AWpEMenGUk7c4ZpJQ5k+8TDmXTaCfsUJiCxu3OG6Hw9j+sTDuG7yUCpKcsFq+sePIBVBlLliZ8gPTz6I9/84nhNHlUIqTH8vsNvfw4zZRTZ9rN/l+C6+Uo0ofpCNyyKJxYgUeCJXOzF5trZo+EQFZ7cCbigYNur44qrHHFhsRIYm0eysLozQlI8zqjoqWHCzNUWFYBVVaM8g3KcwnhEg4vABhYw4pAiApB9hrUJoKSqMc+ZJB3H+6Qcz8IB88CPKK/I4YnAR+TkuIw8rprIyn7KSHI4d2Y/CAo+xx5QzqqovpCIGHVjAxNMGce4pA6ksy90urCpS1IuChXOsO/qISFM+hNGec3yUJIoROdwRub+uqOq/NvYeMfpTCGdwvQK4xOsJrgApHykrsbmXnq+9LjpPmhL5hnuWbMPFMcLaDW1UlORy+r9U8sBjaxg3pgwvZlj9YQuDD+hFEFqGDC7i4bnHUlmSS2Qt1sK5M5dTWZLL+d8ZAMDUc4bQ2OzT6Uf85sqR/P21TZw4upS5/7maypIc7r52FIJgDHQkIybfuIKlyzeCI4hCzqknOkUnH2Pb7nkw6rjzPrEbN6Vr62yxFnOKb+23aouGLyLg1rL2mjpTVzRskhPTZR5mhvQEV1XUWo2fMz7svXQxva68yKFXvtGkv2N0c4T3PmnjuVfqOHl0GQcOLOSUY8t5470mXnqrAccIMddw4yXVlPVJMPbnzzJq8tPUN6dYePVRPPrMx8z+95q0gPNfY9F9q8mJO8Q9Q/9+ufzgmuU8sXwDC6cfxce1HYyY8FdG/+RpwlC57YojycmPbQssmvShV57Jv+JCp/fSxSTO/W6oUQaVLLEWoSAhzlXGk2V1hVWTTajSakVbNKNyj/1yWwe2uXU3aZrQmYp45Nl1FObHuPzcIRx1WDGPPreOxlYfBArzYxwzvA8iwi0/H8Fd146iV16MgWV59O2TQ3syjVt7MsT3LZLpxsx74G0eeXQNjjGU9Unw2N/Xsf6jVta818Tjy9YzbGAhB/TLTeefO4+7pV1p68iqs7NjPBcURaEFbKtb2Vyz5N3eh/ytl+b8zIErEpgyH7vnukYEERH/iWfdYPnLNjH5nCh/6o9Eivuane+EFzM8+cJG6hqSTDlrMGGkPPb8ei46fRACWKvYSNnSmOKuP72PjZRE3CEn7tDUmMJ10ycMQ4Voexq8pTEFCYfIpi0oN8dNuw4VchMuVhU/3D4TSXiwud62/Po/NPnbh0SbWpxsEN4aLDwx+BptCmB+Bx0LD27+oNkADGlY01LeuOpXYjghae39iobxbO0x7qHtnaZj/j1O0ymT6Lz3jyHKtjvrOoLnGtbXdvDUijq8mOH1dxt5a00TXqaT0tQW8PiyDQyoyMNzDXVbOpkw7iC+c3Q5bW3Btnz8zBMqOXx4H2wGOWMAR1i1pomaD5qZPH4g48cN4PvjB3L22P4sfamO9XUd4BgU6Lzv0bDhlEl03Hq3o20dhizFi6etLkqpXRyKnlDeWPOvBzd+0PypPLCkftU7wKRNxVUPBqqzPJExNr2gvYfbY5BEHPvuWtMy/WZjh/wCTAKryvrNnWxpTqGR8sgzn3DS6FL+8LdP0M6Qplaf2vokfmD55V019C2Ks+Cqo1CUjzZ2cMmvXga1PPfaJl55u5HvHVfJyvebqatPUlufJJmy4AitrT6Tb1jBHdNGcv8vxwDwvzX1XHrLKwR+BK6DNrfSMv3Xrhe0I4l4VsK5CE56/i9auKG8cdVfsi7lNvc5tJe18YsFvdLLEmsHpUESjDl4Ck1OLiJKbsIlipSkHyECuQmXZCoiipS4Z3Bdk/47SIsxoDyPnLjD2g3tJDsCcA1YxYs7FObFaO8M8UNL3HNI+RHh1nwvtMQSLgMr8oissnZDGzbQTHIuFEadrPjgTvrYzm5Lue5xtXURzI9JzsK+DS+27FUtvK5P1aFuqNeK4TwP46Z2Y40OSoPJYcygS2lyctOxy2r6KludtdX075IJbarbyzjNfK6ZiXd18Kp0dQ1ol/PsUPJpelo7lH0ZAdcuoM8uauGuuPrYCOTB0Oicyvqatz9TLdw/jfUFdcXVDwbKLE/k6N1hrUCHiYHxMm2InW+ZZpoJ0Z6Srx42ExyIe92XgwgduntH1AXXFRHcUNG46ol93s5a3efQXsU2dpEgV8Yx5TtjLUBSXB4oHEHKxD7djcm0s3LOO43YoAONpnz0M7azRASJewQfrrOdix+DhsZu2lmCZ0MmNL9OYicht+IaqK212H9rlrxFQ3aB6z5rqK7rWz3ECey1xjDBw7h+Oi/adsLELjsfaeycww62udMutpx16r5pqC55POq4ZZGJVq8x6aRYuk+Ed2qoZnANFXkwNMzJ0Pb5rYnUFVePE9VZrsgxWUXrLgvmKqg39libf80UvDFHOHtzff+lN6L2uQtIPf0/aY+X5QK8i2DSJdqKCGZXNK766xe2qFRXMjRfQ3ORQa70MBVZJeFbS0E/QArybeKCszXvFz8St6I0q7WRaOMm237Hvdp578Oiza1GvFhWFYUB4mJIqa1V7K3GFC4qqV/eul8sa37S94jBThhe6wgTPEysK9a7X2KzqB/gDB5g86ddbOPnnuqYWKzbcdkg1NRDf47abllkonfXpoUzJutk2MeGAotxzM39tqx8d7/cmVDbe/hJjpVZjsixPcYa1Bv7z2msjz5yB6z9F1+P2uYuwF/6j73CNcS+EGJnVzS+9ST7+9aOjaXVeRLoT8UyLSGmMtUDrPEDKMi3iUlnad7UnwhG6Lj9t9p57yOiLT3HNWntRhW9tdEEdx1e/04rX6bNRR8XDD3EM841Inr+3mDtDhkUIUL4zvtOtrhKZnORn65DFpvQvblf6+vv8WXeH1jbu+pER5nlIN/qEdZbu8ZZbt/YimukutwaO7u04c2n+KpssNxYWp0nKb3QINPiIv2zxjrLVlMcQ1LtBlXmiRfdXbr5rTa+ilt8PyoYdnDCODNEdFIM8bLGek+4qtwv1p1b2vLaGr4Ou/RrC6u+7Rid5WCO6xHWn8Z1WWR0dllDzdN83R5zWF8+Mtd0Bhca7FUJcbLCuguu61WZpwm5u7xuZTtf5wdtagurBonoDEQu8HaB9VZcA9S3qveL1bmlLW++zzdPKnUJNIXVY11jZzmY47tivQ1X9B+RMLusYdVSvnlWbhdYMzLXLUr9GGR6QswBCKSsrrNE87TJuaecLw7XL4WA261xxAAlmiYGgzW3lDevXLs/jvP/AKwk1dJKaS7iAAAAAElFTkSuQmCC';
+  const renfe = 'data:image/png;base64,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';
+  const routeSets = {"Móstoles Central":[{"min":55,"from":"Alfonso XIII","to":"Móstoles Central","legs":[{"line":"L4","stops":["Alfonso XIII","Prosperidad","Avenida de América","Diego de León","Lista","Goya","Velázquez","Serrano","Colón","Alonso Martínez"]},{"line":"L10","stops":["Alonso Martínez","Tribunal","Plaza de España","Príncipe Pío","Lago","Batán","Casa de Campo","Colonia Jardín","Aviación Española","Cuatro Vientos"]},{"line":"C5","stops":["Cuatro Vientos","San José de Valderas","Alcorcón","Las Retamas","Móstoles Central"]}]},{"min":60,"from":"Alfonso XIII","to":"Móstoles Central","legs":[{"line":"L4","stops":["Alfonso XIII","Prosperidad","Avenida de América","Diego de León"]},{"line":"L6","stops":["Diego de León","Manuel Becerra","Odonnell","Sainz de Baranda","Conde de Casal","Pacifico","Méndez Álvaro"]},{"line":"C5","stops":["Méndez Álvaro","Atocha","Embajadores","Laguna","Aluche","Maestra Justa Freire","Las Águilas","Cuatro Vientos","San José de Valderas","Alcorcón","Las Retamas","Móstoles Central"]}]},{"min":64,"from":"Alfonso XIII","to":"Móstoles Central","legs":[{"line":"L4","stops":["Alfonso XIII","Prosperidad","Avenida de América","Diego de León","Lista","Goya","Velázquez","Serrano","Colón","Alonso Martínez","Bilbao","San Bernardo","Argüelles"]},{"line":"L3","stops":["Argüelles","Ventura Rodríguez","Plaza de España","Callao","Sol","Lavapiés","Embajadores"]},{"line":"C5","stops":["Embajadores","Laguna","Aluche","Maestra Justa Freire","Las Águilas","Cuatro Vientos","San José de Valderas","Alcorcón","Las Retamas","Móstoles Central"]}]}],"Móstoles El Soto":[{"min":59,"from":"Alfonso XIII","to":"Móstoles El Soto","legs":[{"line":"L4","stops":["Alfonso XIII","Prosperidad","Avenida de América","Diego de León","Lista","Goya","Velázquez","Serrano","Colón","Alonso Martínez"]},{"line":"L10","stops":["Alonso Martínez","Tribunal","Plaza de España","Príncipe Pío","Lago","Batán","Casa de Campo","Colonia Jardín","Aviación Española","Cuatro Vientos"]},{"line":"C5","stops":["Cuatro Vientos","San José de Valderas","Alcorcón","Las Retamas","Móstoles Central","Móstoles El Soto"]}]},{"min":64,"from":"Alfonso XIII","to":"Móstoles El Soto","legs":[{"line":"L4","stops":["Alfonso XIII","Prosperidad","Avenida de América","Diego de León"]},{"line":"L6","stops":["Diego de León","Manuel Becerra","Odonnell","Sainz de Baranda","Conde de Casal","Pacifico","Méndez Álvaro"]},{"line":"C5","stops":["Méndez Álvaro","Atocha","Embajadores","Laguna","Aluche","Maestra Justa Freire","Las Águilas","Cuatro Vientos","San José de Valderas","Alcorcón","Las Retamas","Móstoles Central","Móstoles El Soto"]}]},{"min":68,"from":"Alfonso XIII","to":"Móstoles El Soto","legs":[{"line":"L4","stops":["Alfonso XIII","Prosperidad","Avenida de América","Diego de León","Lista","Goya","Velázquez","Serrano","Colón","Alonso Martínez","Bilbao","San Bernardo","Argüelles"]},{"line":"L3","stops":["Argüelles","Ventura Rodríguez","Plaza de España","Callao","Sol","Lavapiés","Embajadores"]},{"line":"C5","stops":["Embajadores","Laguna","Aluche","Maestra Justa Freire","Las Águilas","Cuatro Vientos","San José de Valderas","Alcorcón","Las Retamas","Móstoles Central","Móstoles El Soto"]}]}],"Hospital de Móstoles":[{"min":62,"from":"Alfonso XIII","to":"Hospital de Móstoles","legs":[{"line":"L4","stops":["Alfonso XIII","Prosperidad","Avenida de América","Diego de León","Lista","Goya","Velázquez","Serrano","Colón","Alonso Martínez"]},{"line":"L10","stops":["Alonso Martínez","Tribunal","Plaza de España","Príncipe Pío","Lago","Batán","Casa de Campo","Colonia Jardín","Aviación Española","Cuatro Vientos","Joaquín Vilumbrales","Puerta del Sur"]},{"line":"L12","stops":["Puerta del Sur","Parque Lisboa","Alcorcón Central","Parque Oeste","Universidad Rey Juan Carlos","Móstoles Central","Pradillo","Hospital de Móstoles"]}]},{"min":68,"from":"Alfonso XIII","to":"Hospital de Móstoles","legs":[{"line":"L4","stops":["Alfonso XIII","Prosperidad","Avenida de América","Diego de León"]},{"line":"L6","stops":["Diego de León","Manuel Becerra","Odonnell","Sainz de Baranda","Conde de Casal","Pacifico","Méndez Álvaro"]},{"line":"C5","stops":["Méndez Álvaro","Atocha","Embajadores","Laguna","Aluche","Maestra Justa Freire","Las Águilas","Cuatro Vientos","San José de Valderas","Alcorcón","Las Retamas","Móstoles Central"]},{"line":"L12","stops":["Móstoles Central","Pradillo","Hospital de Móstoles"]}]}]};
+  const stations = [
+    { name:'Móstoles Central', lines:['L12','C5'] },
+    { name:'Móstoles El Soto', lines:['C5'] },
+    { name:'Hospital de Móstoles', lines:['L12'] },
+    { name:'Alfonso XIII', lines:['L4'] }
+  ];
+  const defaultDraft = () => ({ title:'Trabajo', time:'07:00', returnTime:'14:00', round:true, outbound:null, returnRoute:null, vibration:true, enabled:true, days:'Lunes a viernes' });
+  const state = { demo:'trip', screen:'home', search:'', homeDestination:'', candidate:0, context:'trip', routine:null, draft:defaultDraft(), selectedFile:null, playing:false, trip:null, gpsTimer:null, nextTimer:null, demoStep:0, gpsAfterActivation:false };
+  let player = null;
+  let previewTimer = null;
+  const clean = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[ch]);
+  const queryKey = value => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const icon = name => `<i data-lucide="${name}" aria-hidden="true"></i>`;
+  const enhance = () => globalThis.lucide?.createIcons({ attrs:{ width:17, height:17 } });
+  const badge = line => `<span class="st-pill" data-line="${line}">${line}</span>`;
+  const brand = operator => `<img class="st-mark ${operator==='Renfe'?'st-renfe':''}" src="${operator==='Renfe'?renfe:metro}" alt="${operator}">`;
+  const brandFor = line => line.startsWith('C')?'Renfe':'Metro de Madrid';
+  const logos = lines => [...new Set(lines.map(brandFor))].map(brand).join('');
+  const chain = (lines, marks=false) => `<span class="st-route-chain">${lines.map(line => `${marks?brand(brandFor(line)):''}${badge(line)}`).join('<span aria-hidden="true">›</span>')}</span>`;
+  const lines = route => route.legs.map(leg => leg.line);
+  const button = (title, act, kind='', extra='') => `<button type="button" class="st-action ${kind}" data-act="${act}" ${extra}>${title}</button>`;
+  const listButton = (title, act, glyph, sub='', extra='') => `<button type="button" class="st-lineBtn" data-act="${act}" ${extra}>${icon(glyph)}<span>${sub?`<small class="st-label">${sub}</small>`:''}<strong>${title}</strong></span>${icon('chevron-right')}</button>`;
+  const chrome = (title, content, back=false) => `<div class="st-system"><span>9:30</span><span class="st-system-signals">${icon('wifi')}<span class="st-battery" aria-hidden="true"></span></span></div><header class="st-head">${back?`<button type="button" class="st-iconBtn" data-act="back" aria-label="Volver">${icon('chevron-left')}</button>`:`<span class="st-brand">${icon('train-front')}</span>`}<h2>${title}</h2></header><div class="st-body">${content}</div><div class="st-gesture" aria-hidden="true"></div>`;
+  const kicker = text => `<span class="st-kicker">${text}</span>`;
+  const operators = (name, index, ls) => `<button type="button" class="st-lineBtn st-result" data-act="destination" data-index="${index}"><span class="st-logos">${logos(ls)}</span><span><strong>${name}</strong>${chain(ls)}</span>${icon('chevron-right')}</button>`;
+  const dayOptions = ['Lunes a viernes','Lunes, miércoles y viernes','Sábado y domingo','Todos los días'];
+  const routePool = (context=state.context) => context==='trip'?routeSets[state.homeDestination]??[]:context==='ida'?routeSets['Móstoles Central'].map(reverseRoute):routeSets['Móstoles Central'];
+  function reverseRoute(route){ return { ...route, from:route.to, to:route.from, legs:route.legs.slice().reverse().map(leg=>({...leg, stops:leg.stops.slice().reverse()})) }; }
+  function nextTrip(){
+    const r = state.routine;
+    if (!r) return '';
+    return `<section class="st-card st-hero">${kicker('PRÓXIMO VIAJE')}<h3 class="st-h3">${r.enabled?'Alfonso XIII':'Rutina en pausa'}</h3><p class="st-dim">${r.enabled?'Detección desde las '+clean(r.time):'Activa la rutina para programar tu próxima salida.'}</p></section>`;
+  }
+  function routineCard(mock=false){
+    const r = mock ? {...defaultDraft(),outbound:0,returnRoute:0} : state.routine;
+    return `<section><div class="st-topline"><h3 class="st-h3">Alarmas recurrentes</h3>${button('＋ Nueva','create','st-mini')}</div>${r?`<div class="st-card" style="margin-top:8px"><div class="st-topline"><button type="button" class="st-action st-quiet" style="width:auto;justify-content:flex-start;padding:0;color:var(--st-text)" data-act="edit-routine">${clean(r.title||'Trabajo')}</button><label class="st-label">Activa <input type="checkbox" class="st-switch" data-field="active" ${r.enabled?'checked':''}></label></div><p class="st-dim">Móstoles Central → Alfonso XIII</p><span class="st-time">${clean(r.time)}${r.round?' / '+clean(r.returnTime):''}</span><p class="st-dim">${clean(r.days)}</p></div>`:`<div class="st-card" style="margin-top:8px"><p class="st-dim">Guarda los trayectos que haces cada semana.</p></div>`}</section>`;
+  }
+  function home(){
+    return chrome('SleepTrain',nextTrip()+`<section class="st-card"><h3 class="st-h3">Viaje ahora</h3>${listButton(clean(state.homeDestination||'Elegir destino'),'search','search','Destino')}${button('Ver rutas','routes','',state.homeDestination?'':'disabled')}</section>`+routineCard());
+  }
+  function setSearchResults(){
+    const list = phone.querySelector('[data-results]');
+    if (!list) return;
+    const q = queryKey(state.search.trim());
+    const results = stations.map((s,i)=>({ ...s, i })).filter(s => s.name!=='Alfonso XIII' && queryKey(s.name).includes(q));
+    list.innerHTML = results.length?results.map(s=>operators(s.name,s.i,s.lines)).join(''):'<p class="st-dim">No hay estaciones con ese nombre.</p>';
+    enhance();
+  }
+  function searchView(){ return chrome('Destino',`<label class="st-lineBtn st-search">${icon('search')}<input type="search" data-search aria-label="Buscar estación" placeholder="Buscar estación" value="${clean(state.search)}"></label><h3 class="st-h3">Estaciones</h3><div class="st-stations" data-results aria-live="polite"></div>`,true); }
+  function routesView(){
+    const pool = routePool();
+    const recurring = state.context !== 'trip';
+    const r = pool[state.candidate] || pool[0];
+    if (!r) return home();
+    const title = recurring?(state.context==='ida'?'Ruta de ida':'Ruta de vuelta'):'Elegir ruta';
+    const rows = pool.map((route,i) => {
+      const changes = route.legs.slice(1).map(leg => leg.stops[0]);
+      return `<button type="button" class="st-route" data-act="select-route" data-index="${i}" aria-pressed="${i===state.candidate}" ${route.legs.length>3?'data-compact':''}><span class="st-topline">${chain(lines(route),true)}<strong>${route.min} min</strong></span><small class="st-label">${i===state.candidate?'Seleccionada · ':''}${changes.length} transbordos</small><small class="st-dim">Por ${changes.join(' y ')}</small></button>`;
+    }).join('');
+    return chrome(title,`<section class="st-card st-hero"><p class="st-dim">Desde ${r.from}</p><h3 class="st-h3">${r.to}</h3></section><div><h3 class="st-h3">Rutas disponibles</h3><p class="st-dim">Duración orientativa</p></div><div class="st-routes">${rows}</div>${button(recurring?'Usar esta ruta':'Activar aviso','confirm-route')}`,true);
+  }
+  function locateView(){
+    return chrome('SleepTrain',`<section class="st-card st-status" aria-live="polite"><div class="st-destination">${kicker('BUSCANDO UBICACIÓN')}<span class="st-pulse" aria-hidden="true"></span></div><h3 class="st-h3">${state.gpsAfterActivation?'Aviso preparado':'Esperando señal GPS'}</h3><p class="st-dim">${state.gpsAfterActivation?'El seguimiento empezará automáticamente al recuperar la señal.':'Las rutas aparecerán cuando detectemos tu estación de salida.'}</p></section><section class="st-card st-hero"><p class="st-dim">Destino</p><h3 class="st-h3">${clean(state.homeDestination)}</h3></section>${button('Cancelar','cancel-gps','st-secondary')}`);
+  }
+  function tripPositions(route){
+    const points=[];
+    route.legs.forEach((leg,i)=>{
+      if (i) { points.at(-1).change=leg.line; points.at(-1).nextChange=leg.stops.at(-1); }
+      for (const [j,name] of leg.stops.entries()) if(!i||j) points.push({name,line:leg.line});
+    });
+    return points;
+  }
+  function rail(trip, vertical=false){
+    const pts = trip.points;
+    const remaining = pts.length-1-trip.position;
+    const shown = pts.slice(trip.position,Math.min(trip.position+3,pts.length-1));
+    const tail = remaining<=4?pts.at(-1).name:`${remaining} paradas`;
+    const row = (name,index,isTail=false) => `<li class="st-stop" ${index===2&&!isTail?'data-distant':''}><span class="st-dot" aria-hidden="true"></span><span class="st-stop-text" title="${clean(name)}" ${index===0?'aria-current="step"':''}>${vertical&&index===0?'Ahora · ':''}${clean(name)}</span></li>`;
+    return `<ol class="st-rail ${vertical?'st-vertical':''}" aria-label="Estación actual, próximas paradas y tramo restante">${shown.map((p,i)=>row(p.name,i)).join('')}${row(tail,shown.length,true)}</ol>`;
+  }
+  function tracking(trip, vertical=false, sample=false){
+    const point = trip.points[trip.position];
+    const alert = trip.phase==='arrival'||trip.phase==='transfer';
+    const line = trip.phase==='waiting'?point.change:point.line;
+    const stateText = trip.phase==='arrival'?'ALARMA SONANDO':trip.phase==='transfer'?'AVISO DE TRANSBORDO':trip.phase==='waiting'?'ESPERANDO EL SIGUIENTE TREN':'VIAJE EN CURSO';
+    const tip = trip.phase==='arrival'?'Tu destino es la próxima parada.':trip.phase==='transfer'?`Cambia a ${point.change} en ${point.name}.`:trip.phase==='waiting'?'SleepTrain continuará al detectar el movimiento del siguiente tren.':'';
+    const controls = alert?button('Estoy despierto','ack','st-amber'):trip.phase==='waiting'?button('Ya estoy en el siguiente tren','board'):sample?'':`<div class="st-form">${button('Avanzar en la demo','advance','st-secondary')}${button('Finalizar viaje','finish','st-quiet')}</div>`;
+    return chrome('SleepTrain',`<div class="st-destination">${icon('map-pin')}${clean(trip.route.to)}</div><section class="st-card ${alert?'st-warning':''}" aria-live="polite"><div class="st-topline">${kicker(stateText)}${badge(line)}</div>${rail(trip,vertical)}${tip?`<p class="st-dim">${tip}</p>`:''}${controls}</section>${routineCard(sample)}`);
+  }
+  function editor(){
+    const d = state.draft;
+    const enabled = d.outbound!==null && (!d.round||d.returnRoute!==null);
+    const nameFor = (selection,context) => selection===null?'Elegir ruta':lines(routePool(context)[selection]).join(' › ');
+    return chrome(state.routine?'Editar alarma':'Nueva alarma',`<section class="st-card"><div class="st-topline"><span class="st-dim">Desde</span><strong>Móstoles Central</strong></div><div class="st-topline"><span class="st-dim">Hasta</span><strong>Alfonso XIII</strong></div><div class="${d.round?'st-form':''}">${listButton(nameFor(d.outbound,'ida'),'route-out','route','Ruta de ida')}${d.round?listButton(nameFor(d.returnRoute,'vuelta'),'route-return','route','Ruta de vuelta'):''}</div></section><section class="st-card"><div class="${d.round?'st-form':''}"><label class="st-field">Ida<input type="time" data-field="time" value="${clean(d.time)}"></label>${d.round?`<label class="st-field">Vuelta<input type="time" data-field="returnTime" value="${clean(d.returnTime)}"></label>`:''}</div><label class="st-topline">Incluir vuelta<input type="checkbox" class="st-switch" data-field="round" ${d.round?'checked':''}></label></section><section class="st-card"><label class="st-field">Repetir<select data-field="days">${dayOptions.map(day=>`<option ${day===d.days?'selected':''}>${day}</option>`).join('')}</select></label>${listButton(clean(state.selectedFile?.name||'Tono de SleepTrain'),'audio','music','Audio')}<label class="st-topline">Vibración<input type="checkbox" class="st-switch" data-field="vibration" ${d.vibration?'checked':''}></label><label class="st-field">Etiqueta (opcional)<input type="text" data-field="title" maxlength="40" value="${clean(d.title)}"></label></section>${button('Guardar alarma','save','',enabled?'':'disabled')}`,true);
+  }
+  function audioView(){
+    return chrome('Audio de la alarma',`<section class="st-card"><p class="st-dim">${state.selectedFile?'Archivo seleccionado':'Tono actual'}</p><h3 class="st-h3">${clean(state.selectedFile?.name||'Tono de SleepTrain')}</h3></section><section class="st-card">${listButton('Elegir archivo','file','file-audio','Archivos del sistema')}<button type="button" class="st-lineBtn st-editor-audio" aria-pressed="${state.playing}" data-act="play">${icon(state.playing?'square':'play')}<span><strong>${state.playing?'Detener prueba':'Escuchar una prueba'}</strong><small class="st-label">${state.playing?'Reproduciendo':'Duración'} · 5 segundos</small></span></button>${listButton('Usar tono de SleepTrain','default-tone','bell')}</section>`,true);
+  }
+  function render(){
+    for(const b of root.querySelectorAll('[data-demo]')) b.setAttribute('aria-pressed',String(b.dataset.demo===state.demo));
+    stage.hidden=state.demo==='compare';
+    comparison.hidden=!stage.hidden;
+    if(state.demo==='compare'){
+      const route=routeSets['Móstoles Central'][0],points=tripPositions(route);
+      const sample={route,points,position:state.demoStep,phase:'riding'};
+      root.querySelector('[data-horizontal]').innerHTML=tracking(sample,false,true);
+      root.querySelector('[data-vertical]').innerHTML=tracking(sample,true,true);
+    } else {
+      const screens={home,search:searchView,routes:routesView,locate:locateView,edit:editor,audio:audioView,riding:()=>tracking(state.trip)};
+      phone.innerHTML=screens[state.screen]();
+      if(state.screen==='search') setSearchResults();
+    }
+    enhance();
+  }
+  function show(screen){ state.screen=screen; render(); }
+  function stopPlayback(update=false){
+    if(previewTimer) clearTimeout(previewTimer);
+    previewTimer=null;
+    if(player) player.stop();
+    player=null;
+    state.playing=false;
+    if(update) render();
+  }
+  async function play(){
+    if(state.playing){stopPlayback(true);return;}
+    state.playing=true;
+    render();
+    if(state.selectedFile){
+      const url=URL.createObjectURL(state.selectedFile);
+      const audio=new Audio(url);
+      audio.volume=.32;
+      audio.addEventListener('ended',()=>stopPlayback(true),{once:true});
+      player={stop:()=>{audio.pause();URL.revokeObjectURL(url);}};
+      audio.play().catch(()=>stopPlayback(true));
+    }else{
+      const Ctx=window.AudioContext||window.webkitAudioContext;
+      if(Ctx){
+        const ctx=new Ctx();
+        const now=ctx.currentTime;
+        ctx.resume().catch(()=>stopPlayback(true));
+        const o=ctx.createOscillator(), g=ctx.createGain();
+        o.type='sine';o.frequency.value=587.33;
+        o.connect(g);g.connect(ctx.destination);g.gain.value=0;
+        for(let i=0;i<5;i++){
+          g.gain.setValueAtTime(0,now+i);
+          g.gain.linearRampToValueAtTime(.085,now+i+.06);
+          g.gain.linearRampToValueAtTime(0,now+i+.47);
+        }
+        o.start(now);o.stop(now+5);
+        player={stop:()=>ctx.close().catch(()=>{})};
+      }
+    }
+    previewTimer=setTimeout(()=>stopPlayback(true),5000);
+  }
+  function remember(){
+    globalThis.openai?.setWidgetState?.({modelContent:{vista:state.demo},privateContent:{}})?.catch(()=>{});
+  }
+  function clearGps(){ if(state.gpsTimer) clearTimeout(state.gpsTimer); state.gpsTimer=null; }
+  function waitForGps(beforeRoutes){
+    clearGps();
+    state.gpsAfterActivation=!beforeRoutes;
+    show('locate');
+    state.gpsTimer=setTimeout(()=>{
+      if(beforeRoutes) show('routes');
+      else show('riding');
+      state.gpsTimer=null;
+    },4300);
+  }
+  function routePick(context){ state.context=context; state.candidate=(context==='ida'?state.draft.outbound:context==='vuelta'?state.draft.returnRoute:0)??0;show('routes'); }
+  function selectDemo(demo){
+    stopPlayback();clearGps();clearTimeout(state.nextTimer);state.demo=demo;state.context='trip';state.candidate=0;
+    if(demo==='gps'){state.homeDestination='';state.search='Móstoles';show('search');}
+    else if(demo==='routine'){state.draft=state.routine?{...state.routine}:defaultDraft();show('edit');}
+    else show('home');
+    remember();
+  }
+  function advance(){
+    const t=state.trip;
+    if(!t||t.phase!=='riding')return;
+    t.position=Math.min(t.position+1,t.points.length-2);
+    const p=t.points[t.position];
+    if(p.change)t.phase='transfer';
+    else if(t.position===t.points.length-2)t.phase='arrival';
+    render();
+  }
+  function board(){
+    clearTimeout(state.nextTimer);
+    const t=state.trip;
+    if(t?.phase==='waiting'){ t.phase='riding'; advance(); }
+  }
+  function acknowledge(){
+    if(state.trip.phase==='arrival'){ state.trip=null; show('home'); return; }
+    state.trip.phase='waiting'; render(); state.nextTimer=setTimeout(board,3500);
+  }
+  function confirmRoute(){
+    if(state.context!=='trip'){
+      state.draft[state.context==='ida'?'outbound':'returnRoute']=state.candidate;
+      show('edit');return;
+    }
+    const route=routePool()[state.candidate];
+    state.trip={route,points:tripPositions(route),position:0,phase:'riding'};
+    if(state.demo==='gps')waitForGps(false);else show('riding');
+  }
+  function goBack(){
+    if(state.screen==='audio'){stopPlayback();show('edit');}
+    else if(state.screen==='routes'){show(state.context==='trip'?'search':'edit');}
+    else if(state.screen==='search'||state.screen==='edit')show('home');
+  }
+  function pointCompare(jump){
+    const total=tripPositions(routeSets['Móstoles Central'][0]).length;
+    state.demoStep=jump?total-4:Math.min(state.demoStep+1,total-2);
+    render();
+  }
+  const handlers={
+    search:()=>show('search'), routes:()=>routePick('trip'), back:goBack,
+    destination:button=>{state.homeDestination=stations[Number(button.dataset.index)].name;state.context='trip';state.candidate=0;if(state.demo==='gps')waitForGps(true);else show('routes');},
+    'select-route':button=>{state.candidate=Number(button.dataset.index);render();phone.querySelector('[data-act="select-route"][aria-pressed="true"]')?.focus();},
+    'confirm-route':confirmRoute,'cancel-gps':()=>{clearGps();show(state.gpsAfterActivation?'routes':'home');},
+    advance, finish:()=>{clearTimeout(state.nextTimer);state.trip=null;show('home');}, ack:acknowledge, board,
+    create:()=>{state.draft=defaultDraft();if(state.demo==='compare')state.demo='routine';show('edit');},
+    'edit-routine':()=>{state.draft=state.routine?{...state.routine}:defaultDraft();if(state.demo==='compare')state.demo='routine';show('edit');},
+    'route-out':()=>routePick('ida'),'route-return':()=>routePick('vuelta'),
+    save:()=>{state.routine={...state.draft};show('home');},audio:()=>show('audio'),
+    file:()=>{fileInput.value='';fileInput.click();},play,
+    'default-tone':()=>{stopPlayback();state.selectedFile=null;render();},
+    'compare-advance':()=>pointCompare(false),'compare-jump':()=>pointCompare(true)
+  };
+  root.addEventListener('click',event=>{
+    const demo=event.target.closest('[data-demo]');
+    if(demo){selectDemo(demo.dataset.demo);return;}
+    const action=event.target.closest('[data-act]');
+    if(action)handlers[action.dataset.act]?.(action);
+  });
+  root.addEventListener('input',event=>{
+    if(event.target.matches('[data-search]')){state.search=event.target.value;setSearchResults();}
+    if(event.target.matches('[data-field=title]'))state.draft.title=event.target.value;
+  });
+  root.addEventListener('change',event=>{
+    const el=event.target;
+    if(el===fileInput){ if(fileInput.files[0]){stopPlayback();state.selectedFile=fileInput.files[0];render();}return; }
+    const key=el.dataset.field;
+    if(key==='active'&&state.routine){state.routine.enabled=el.checked;render();}
+    else if(key){state.draft[key]=el.type==='checkbox'?el.checked:el.value;if(key==='round')render();}
+  });
+  render();
+})();
+</script>

@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">SlipTrain</string>
+    <string name="finding_location">Buscando ubicación…</string>
+    <string name="calculating_routes">Calculando rutas…</string>
+    <string name="cancel_alert">Cancelar aviso</string>
+    <string name="finish_journey">Finalizar viaje</string>
+    <string name="alert_prepared">Aviso preparado</string>
+    <string name="waiting_for_route_location">Destino · %1$s\nEl seguimiento empezará al recuperar una ubicación válida para tu ruta.</string>
+    <string name="waiting_next_train">Esperando el siguiente tren</string>
+    <string name="waiting_transfer_detail">Transbordo en %1$s · destino %2$s</string>
+    <string name="change_at">Cambia en %1$s</string>
+    <string name="wake_at">Despierta en %1$s</string>
+    <string name="on_route">En tu ruta</string>
+    <string name="progress_detail">%1$s%2$s · destino %3$s</string>
+    <string name="trip_in_progress">Viaje en curso</string>
+    <string name="trip_progress_unavailable">Abre de nuevo la app si el estado no se actualiza.</string>
+    <string name="transfer_alarm">Avisarme en los transbordos</string>
+    <string name="no_transfers">Sin transbordos</string>
+    <plurals name="transfer_count">
+        <item quantity="one">%d transbordo</item>
+        <item quantity="other">%d transbordos</item>
+    </plurals>
+    <string name="start_sound_preview">Escuchar una prueba</string>
+    <string name="stop_sound_preview">Detener prueba</string>
+    <string name="no_departures_scheduled">Sin salidas programadas</string>
+    <string name="enable_routine_for_next_departure">Activa una rutina para programar tu próxima salida.</string>
+</resources>
